@@ -3,8 +3,9 @@ import { DeleteOutlined, PlusOutlined } from "@ant-design/icons";
 import "./App.css";
 import {
   Block,
-  BuiltInExpression,
+  BlockValue,
   BuiltInExpressionType,
+  Direction,
   Expression,
   ExpressionType,
   HeaderSegment,
@@ -20,7 +21,7 @@ import {
   resolveBlock,
   resolveProperty,
   Scope,
-  transpileBlock,
+  transpileMainBlock,
 } from "./Evaluator";
 import { addProperty, blockEntity, changePropertyValue, deleteProperty } from "./EditorModel";
 
@@ -83,7 +84,7 @@ function LeftSidebar() {
   );
 }
 
-function Box({ children, direction }: { children: ReactNode; direction?: "horizontal" | "vertical" }) {
+function Box({ children, direction }: { children: ReactNode; direction?: Direction }) {
   return (
     <Space
       direction={direction}
@@ -99,12 +100,12 @@ function Box({ children, direction }: { children: ReactNode; direction?: "horizo
   );
 }
 
-function StructureBoxes() {
+function StructureBlock() {
   const block = blockEntity.use();
   return <StructureExpression expression={block.value} scope={createScope(block)} />;
 }
 
-function StructureExpression({ expression, scope }: { expression: Expression | BuiltInExpression; scope: Scope }) {
+function StructureExpression({ expression, scope }: { expression: BlockValue; scope: Scope }) {
   switch (expression.type) {
     case BuiltInExpressionType.BinaryOperatorCall:
       return <>built-in binary operator call</>;
@@ -153,7 +154,7 @@ function StructureHeaderSegment({ segment, scope }: { segment: HeaderSegment; sc
 function Structure() {
   return (
     <Pane title="Structure">
-      <StructureBoxes />
+      <StructureBlock />
     </Pane>
   );
 }
@@ -208,7 +209,7 @@ function RightSidebar() {
 }
 
 function Result() {
-  const result = blockEntity.use((it) => evaluateAst(transpileBlock(it)));
+  const result = blockEntity.use((it) => evaluateAst(transpileMainBlock(it)));
   return <Content>{result}</Content>;
 }
 

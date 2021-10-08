@@ -1,10 +1,12 @@
+export type BlockValue = Expression | BuiltInExpression;
+
 export type Block = {
   id: BlockId;
   name: string;
   header: Header;
   type: Type;
   properties: Property[];
-  value: Expression | BuiltInExpression;
+  value: BlockValue;
 };
 
 export type BlockId = string;

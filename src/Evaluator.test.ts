@@ -1,12 +1,16 @@
-import { evaluateAst, transpileBlock } from "./Evaluator";
+import { evaluateAst, transpileMainBlock } from "./Evaluator";
 import { basicArithmetic, bmiCalculator } from "./Examples";
+import { Block } from "./Model";
+
+function testEvaluator(block: Block, expectedResult: any) {
+  const ast = transpileMainBlock(block);
+  expect(evaluateAst(ast)).toBe(expectedResult);
+}
 
 test("Basic arithmetic", () => {
-  const ast = transpileBlock(basicArithmetic);
-  expect(evaluateAst(ast)).toBe(5);
+  testEvaluator(basicArithmetic, 5);
 });
 
 test("BMI calculator", () => {
-  const ast = transpileBlock(bmiCalculator);
-  expect(evaluateAst(ast)).toBe(10000);
+  testEvaluator(bmiCalculator, 10000);
 });
